@@ -1,43 +1,58 @@
 import { CardData } from "@/app/page";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter } from "@nextui-org/react";
+import { HTMLMotionProps } from "framer-motion";
 
 type ModalProps =  {
-  mockData: CardData[],
+  data: CardData[],
   activeItem: number,
   isOpen: boolean;
   onOpenChange: () => void;
 }
 
-export function CodeModal({ isOpen, onOpenChange, mockData, activeItem }: ModalProps) {
+export function CodeModal({ isOpen, onOpenChange, data, activeItem }: ModalProps) {
+  const modalMotion: HTMLMotionProps<"section"> = {
+    variants: {
+      enter: {
+        scale: 1,
+        opacity: 1,
+      },
+      exit: {
+        scale: 0.9,
+        opacity: 0,
+      },
+    },
+  }
+
   return (
     <Modal
       backdrop="blur"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      motionProps={{
-        variants: {
-          enter: { y: 0, opacity: 1, transition: { ease: "easeOut" } },
-          exit: { y: 18, opacity: 0, transition: { duration: 0.17, ease: "easeIn" } },
-        }
-      }}
+      motionProps={modalMotion}
+      placement="center"
+      size="5xl"
     >
       <ModalContent>
         {(onClose) => {
-          const item = mockData.find(item => item.id == activeItem);
-          
-          if (!item) {
-            return <ModalBody>Not found</ModalBody>
-          }
+          const item = data.find(item => item.id == activeItem);
+          if (!item) return <ModalBody>Not found</ModalBody>
 
           const { title, content, id } = item;
 
           return (
             <>
               <ModalBody>
-                <p>{content}</p>
+                <h3 className="font-bold">{title} ({id})</h3>
+                <div className="mb-6 w-full h-96 max-h-[50vh]" dangerouslySetInnerHTML={{ __html: content }}>
+                </div>
+                <code>
+                  <pre className="bg-black p-1 text-wrap">
+                    {content}
+                  </pre>
+                </code>
               </ModalBody>
               <ModalFooter>
-                <Button onPress={onClose}>Close {title} ({id})</Button>
+                <Button onPress={onClose}>Close</Button>
               </ModalFooter>
             </>
         )}}
