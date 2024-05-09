@@ -1,8 +1,12 @@
 import { EFFECTS } from "@/data";
-import { Button, Modal, ModalBody, ModalContent, ModalFooter } from "@nextui-org/react";
+import hljs from "highlight.js/lib/core";
+import xml from "highlight.js/lib/languages/xml";
+import 'highlight.js/styles/base16/black-metal.min.css';
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { HTMLMotionProps } from "framer-motion";
 import { useState } from "react";
 import { renderToString } from "react-dom/server";
+
 
 type ModalProps =  {
   activeItem: number,
@@ -27,34 +31,14 @@ export function CodeModal({ isOpen, onOpenChange, activeItem }: ModalProps) {
   const [hasCopied, setHasCopied] = useState(false);
   const activeEffect = EFFECTS.find(effect => effect.id === activeItem);
 
-  if (activeEffect === undefined) {
-    return (
-      <Modal
-        backdrop="blur"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        motionProps={modalMotion}
-        placement="center"
-        size="5xl"
-      >
-        <ModalContent>
-          {(onClose) => {
-            return (
-              <>
-                <ModalBody>
-                  <p>Effect not found :\</p>
-                </ModalBody>
-                <ModalFooter>
-                  <Button onPress={onClose}>Close</Button>
-                </ModalFooter>
-              </>
-          )}}
-        </ModalContent>
-      </Modal>
-    );
-  }
+  // to fix - dont show when close the modal, just with invalid id
+  if (activeEffect === undefined) return EmptyModal();
 
-  const effectCode = renderToString(activeEffect.element);
+  hljs.registerLanguage('xml', xml);
+
+  const indentCode = require('js-beautify').html;
+  const effectCode = indentCode(renderToString(activeEffect.element));
+  const highlitedCode = hljs.highlight(effectCode, {language: 'xml'}).value;
 
   function onCopy() {
     navigator.clipboard.writeText(effectCode);
@@ -72,30 +56,62 @@ export function CodeModal({ isOpen, onOpenChange, activeItem }: ModalProps) {
       placement="center"
       size="5xl"
     >
-      <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalBody>
-              <h3 className="font-bold">{activeEffect.name}</h3>
-              <div className="mb-6 w-full h-96 max-h-[50vh]">
-                {activeEffect.element}
+      <ModalContent className="mx-4">
+        <ModalHeader>
+          <h3>{activeEffect.name}</h3>
+        </ModalHeader>
+        <ModalBody className="px-2 md:px-4">
+          <div className="flex md:flex-row flex-col gap-3 mb-2">
+            <div className="relative flex-[2] rounded-2xl *:min-w-full min-h-60 *:min-h-full overflow-hidden aspect-square">
+              {activeEffect.element}
+            </div>
+            <div className="relative flex-[3] w-full">
+              <pre className="w-full h-full text-wrap break-all">
+                <code className="rounded-2xl h-full overflow-hidden hljs" dangerouslySetInnerHTML={{ __html: highlitedCode }}>
+                </code>
+              </pre>
+              <div className="right-2 bottom-2 md:absolute mt-3 md:mt-0 ml-auto md:ml-0 size-fit">
+                {hasCopied ?
+                  <Button isDisabled>Copied ✔</Button> :
+                  <Button onPress={onCopy}>Copy code</Button>
+                }
               </div>
-              <code>
-                <pre className="bg-black p-1 text-wrap">
-                  {effectCode}
-                </pre>
-              </code>
-            </ModalBody>
-            <ModalFooter>
-              {hasCopied ?
-                <Button isDisabled>Copied ✔</Button> :
-                <Button onPress={onCopy}>Copy code</Button>
-              }
-              <Button onPress={onClose}>Close</Button>
-            </ModalFooter>
-          </>
-        )}
+            </div>
+          </div>
+        </ModalBody>
       </ModalContent>
     </Modal>
   );
+
+
+  function EmptyModal() {
+    return (
+      <Modal
+        backdrop="blur"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        motionProps={modalMotion}
+        placement="center"
+        size="5xl"
+      >
+        <ModalContent>
+          {(onClose) => {
+
+            return (
+              <>
+                <ModalHeader>
+                  Not found :/
+                </ModalHeader>
+                <ModalBody>
+                  <p className="opacity-20 text-3xl text-center">Empty space... please try again '^^</p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button onPress={onClose}>Close</Button>
+                </ModalFooter>
+              </>
+          )}}
+        </ModalContent>
+      </Modal>
+    );
+  }
 }

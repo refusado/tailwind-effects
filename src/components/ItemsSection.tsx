@@ -30,17 +30,16 @@ function ItemsList() {
   return (
     <>
       <ul className="gap-8 grid grid-cols-1 sm:grid-cols-2 w-full max-w-4xl">
-        {itemsData.map(({ name, element, id }, i) => {
-          return (
+        {itemsData.map(({ name, element, id }, i) => (
             <motion.li
               key={id}
               transition={{ delay: i % 2 == 0 ? 0 : 0.077 }}
               initial={{ opacity: 0, scale: 0.856 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ margin: "-80px" }}
+              viewport={{ margin: "-60px" }}
             >
               <motion.button
-                className="hover:brightness-110 min-w-full min-h-full duration-150"
+                className="md:hover:brightness-110 min-w-full min-h-full md:duration-150"
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setActiveItem(id)}
               >
@@ -49,14 +48,16 @@ function ItemsList() {
                     {name}
                   </CardHeader>
                   <Divider />
-                  <CardBody className="h-64">
-                    {element}
+                  <CardBody>
+                    <div className="relative rounded-xl *:min-w-full *:min-h-full overflow-hidden aspect-square">
+                      {element}
+                    </div>
                   </CardBody>
                 </Card>
               </motion.button>
             </motion.li>
           )
-        })}
+        )}
       </ul>
 
       <CodeModal

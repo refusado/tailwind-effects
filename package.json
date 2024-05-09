@@ -11,6 +11,8 @@
   "dependencies": {
     "@nextui-org/react": "^2.3.6",
     "framer-motion": "^11.1.7",
+    "highlight.js": "^11.9.0",
+    "js-beautify": "^1.15.1",
     "next": "14.2.3",
     "nuqs": "^1.17.2",
     "react": "^18",
