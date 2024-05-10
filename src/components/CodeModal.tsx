@@ -103,7 +103,7 @@ export function CodeModal({ isOpen, onOpenChange, activeItem }: ModalProps) {
                   Not found :/
                 </ModalHeader>
                 <ModalBody>
-                  <p className="opacity-20 text-3xl text-center">Empty space... please try again '^^</p>
+                  <p className="opacity-20 text-3xl text-center">Empty space... please try again &apos;^^</p>
                 </ModalBody>
                 <ModalFooter>
                   <Button onPress={onClose}>Close</Button>

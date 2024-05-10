@@ -1,8 +1,8 @@
 import { nextui } from "@nextui-org/react";
 import type { Config } from "tailwindcss";
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 const config: Config = {
-  darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,15 +10,13 @@ const config: Config = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
-    },
     container: {
-      center: true
+      center: true,
+      screens: {
+        ...defaultTheme.screens,
+        'xl': defaultTheme.screens.lg,
+        '2xl': defaultTheme.screens.lg
+      }
     }
   },
   plugins: [nextui(), require('tailwind-scrollbar')],
