@@ -1,7 +1,6 @@
 'use client';
 
 import { Card, CardHeader, CardBody } from "@nextui-org/card";
-import { Divider } from "@nextui-org/divider";
 import { motion } from "framer-motion";
 import { CodeModal } from "./CodeModal";
 import { parseAsInteger, useQueryState } from "nuqs";
@@ -12,7 +11,7 @@ import { EFFECTS, Effect } from "@/data";
 
 export function EffectsList() {
   return (
-    <section className="container">
+    <section className="pb-40 container">
       <Suspense>
         <List />
       </Suspense>
@@ -34,36 +33,37 @@ function List(): ReactNode {
   
   return (
     <>
-      <ul className="gap-8 grid grid-cols-1 sm:grid-cols-2 mx-auto w-full max-w-4xl">
+      <motion.ul
+        className="gap-10 grid grid-cols-1 sm:grid-cols-2 mx-auto w-full"
+      >
         {itemsData.map(({ name, element, id }, i) => (
             <motion.li
               key={id}
-              transition={{ delay: i % 2 == 0 ? 0 : 0.077 }}
+              transition={{ delay: 0.085 * i }}
               initial={{ opacity: 0, scale: 0.856 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ margin: "-77px", once: true }}
+              viewport={{ once: true, amount: 0.3 }}
             >
-              <motion.button
-                className="md:hover:brightness-110 min-w-full min-h-full md:duration-150"
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setActiveItem(id)}
+              <Card
+                className="min-w-full min-h-full"
+                isPressable
+                onPress={() => setActiveItem(id)}
               >
-                <Card>
-                  <CardHeader>
+                <CardHeader>
+                  <p className="mb-1">
                     {name}
-                  </CardHeader>
-                  <Divider />
-                  <CardBody>
-                    <div className="relative rounded-xl *:min-w-full *:min-h-full overflow-hidden aspect-square">
-                      {element}
-                    </div>
-                  </CardBody>
-                </Card>
-              </motion.button>
+                  </p>
+                </CardHeader>
+                <CardBody>
+                  <div className="relative rounded-xl *:min-w-full *:min-h-full overflow-hidden aspect-square">
+                    {element}
+                  </div>
+                </CardBody>
+              </Card>
             </motion.li>
           )
         )}
-      </ul>
+      </motion.ul>
 
       <CodeModal
         activeItem={activeItem || 0}
