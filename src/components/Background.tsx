@@ -1,13 +1,13 @@
 export function Background() {
   return (
-    <div className="top-0 left-0 -z-10 absolute w-screen *:h-screen pointer-events-none">
-      <div className="relative *:absolute *:blur-3xl *:rounded-full container *:size-48">
-        <div className="top-16 right-40 bg-cyan-500/20 md:bg-cyan-500/35"></div>
-        <div className="top-48 right-0 bg-emerald-500/20 md:bg-emerald-500/35"></div>
+    <div className="pointer-events-none absolute left-0 top-0 -z-10 w-screen *:h-screen">
+      <div className="container relative *:absolute *:size-48 *:rounded-full *:blur-3xl">
+        <div className="right-40 top-16 bg-cyan-500/20 md:bg-cyan-500/35"></div>
+        <div className="right-0 top-48 bg-emerald-500/20 md:bg-emerald-500/35"></div>
       </div>
 
       <div className="relative">
-        <div className="top-3/4 -left-[15vw] absolute bg-emerald-600/5 blur-3xl rounded-full size-[33vw]"></div>
+        <div className="absolute -left-[15vw] top-3/4 size-[33vw] rounded-full bg-emerald-600/5 blur-3xl"></div>
       </div>
     </div>
   );
